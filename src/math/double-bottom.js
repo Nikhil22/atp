@@ -32,18 +32,37 @@ function isMidpointThresholdMet(mid, lowOne) {
 }
 
 /*
-Start from beginning of range, traverse forward
-Set lowTwo ad mid to null
-Set lowOne to beg, high to end
-if lowest low hit, update lowOne, and mid and lowTwp back to null
-if surrounding are lower, update mid, and set one after to lowTwo
-if loweer low than lowTwpo hit, update lowTwo
-Reset if lowTwo is less than lowOne
-False if one of them is null
-If not, check if basic W
-Then, check if thresholds are met
+@params:
+  data: Array of numbers ([open, high, low, close])
+  RANGE: Number length to evaluate presence of double bottom
+    - Default value: 14
+
+@returns boolean
+  true if double bottom detected
+  false if not
+
+Basic algorithm:
+  Set lowTwo and mid to null
+  Set lowOne to beg, high to end
+  Start from beginning of range, traverse until end:
+    if candidate is less than lowOne
+      update lowOne
+      mid and lowTwo back to null
+      continue to next iteration
+    if next is less than lowOne
+      update lowOne
+      mid and lowTwo back to null
+      continue to next iteration
+    if previous and next are lower than mid
+      update mid
+      set lowTwo to next
+      continue to next iteration
+    if mid is set and candidate is less than lowTwo
+      update lowTwo
+  Return false if lowOne, lowTwo, mid or high is null
+  Return true if basic W and thresholds met, else return false
 */
-export const isDoubleBottom = (data, RANGE=10) => {
+export const isDoubleBottom = (data, RANGE=14) => {
   // TODO - distance between both bottoms should be a factor
   // TODO - should return yes even during pullback.
   if (RANGE > data.length) {
