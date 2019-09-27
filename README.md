@@ -1,6 +1,6 @@
 # Find Double Bottoms
 ## Super basic for now
-### Can adjust to length of range!
+### Can adjust to any length of range!
 
 #### Double bottom with range of 5 points (candlestick)
 ![Screenshot](dbc-5.png)
