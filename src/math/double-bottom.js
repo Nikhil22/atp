@@ -1,6 +1,6 @@
-function isBasicW(high, lowOne, lowTwo, mid) {
+function isBasicW(highest, lowOne, lowTwo, mid) {
   return (
-    high >= mid
+    highest >= mid
     && lowTwo >= lowOne
     && mid > lowTwo
   );
@@ -43,8 +43,10 @@ function isMidpointThresholdMet(mid, lowOne) {
 
 Basic algorithm:
   Set lowTwo and mid to null
+  Set previousMid and previousLowTwo to null (need these for pullbacks)
   Set lowOne to beg, high to end
   Start from beginning of range, traverse until end:
+    Update highest if necessary
     if candidate is less than lowOne
       update lowOne
       mid and lowTwo back to null
@@ -53,18 +55,22 @@ Basic algorithm:
       update lowOne
       mid and lowTwo back to null
       continue to next iteration
-    if previous and next are lower than mid
+    if previous and next are lower than mid, and candidate > mid
+      update previousMid
       update mid
+      update previousLowTwo
       set lowTwo to next
       continue to next iteration
     if mid is set and candidate is less than lowTwo
+      update previousLowTwo
       update lowTwo
+  if mid === highest (in the case of pullbacks)
+    set mid back to previousMid
+    set lowTwo back to previousLowTwo
   Return false if lowOne, lowTwo, mid or high is null
   Return true if basic W and thresholds met, else return false
 */
 export const isDoubleBottom = (data, RANGE=14) => {
-  // TODO - distance between both bottoms should be a factor
-  // TODO - should return yes even during pullback.
   if (RANGE > data.length) {
     RANGE = data.length;
   }
@@ -72,10 +78,17 @@ export const isDoubleBottom = (data, RANGE=14) => {
   let lowOne = data[startIdx];
   let lowTwo = null;
   let mid = null;
-  let high = data[data.length - 1];
+  let previousMid = null;
+  let previousLowTwo = null;
+  let highest = data[data.length - 1];
 
   for (let i = startIdx + 1; i < data.length - 1; i++) {
     const candidate = data[i];
+
+    if (candidate > highest) {
+      highest = candidate;
+    }
+
     if (candidate < lowOne) {
       lowOne = candidate;
       mid = null;
@@ -92,23 +105,31 @@ export const isDoubleBottom = (data, RANGE=14) => {
       continue;
     }
 
-    if (candidate > prev && candidate > next) {
+    if (candidate > prev && candidate > next && candidate > mid) {
+      previousMid = mid;
       mid = candidate;
+      previousLowTwo = lowTwo;
       lowTwo = next;
       continue;
     }
 
     if (mid && candidate < lowTwo) {
+      previousLowTwo = lowTwo;
       lowTwo = candidate;
     }
   }
 
-  if ([lowOne, lowTwo, mid, high].some(el => el === null)) {
+  if (mid === highest) {
+    mid = previousMid
+    lowTwo = previousLowTwo;
+  }
+
+  if ([lowOne, lowTwo, mid, highest].some(el => el === null)) {
     return false;
   }
 
   return (
-    isBasicW(high, lowOne, lowTwo, mid)
+    isBasicW(highest, lowOne, lowTwo, mid)
     && areThresholdsMet(lowOne, lowTwo, mid)
   );
 }

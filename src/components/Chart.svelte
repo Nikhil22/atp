@@ -35,7 +35,7 @@
     chart.render();
   }
   onMount(createChart);
-  let dblBtm = isDoubleBottom(buildClosesData(dataOne), 9);
+  let dblBtm = isDoubleBottom(buildClosesData(dataOne), 10);
 </script>
 
 <div>

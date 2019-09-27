@@ -14,3 +14,9 @@
 ![Screenshot](dbc-9.png)
 #### Double bottom with range of 9 points (line)
 ![Screenshot](dbl-9.png)
+
+### Even works for pullbacks!
+#### Double bottom with range of 9 points (candlestick), with pullback
+![Screenshot](dbc-9-pb.png)
+#### Double bottom with range of 9 points (line), with pullback
+![Screenshot](dbl-9-pb.png)
