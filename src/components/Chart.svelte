@@ -1,14 +1,14 @@
 <script>
   import { onMount } from 'svelte';
-  import { dataOne } from '../data/one/one'
-  import { isDoubleBottom } from '../math/double-bottom'
+  import { dataOne } from '../data'
+  import { isDoubleBottom, buildClosesData } from '../math'
 
   function createChart() {
 
     const options = {
       chart: {
         height: 1000,
-        type: 'line',
+        type: 'candlestick',
       },
       series: [{
         data: dataOne
@@ -35,7 +35,7 @@
     chart.render();
   }
   onMount(createChart);
-  let dblBtm = isDoubleBottom(dataOne);
+  let dblBtm = isDoubleBottom(buildClosesData(dataOne), 9);
 </script>
 
 <div>
