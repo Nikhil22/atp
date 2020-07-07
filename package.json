@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "i": "^0.3.6",
-    "npm": "^6.11.3",
+    "npm": "^6.14.6",
     "sirv-cli": "^0.4.4",
     "svelte-apollo": "^0.3.0"
   },
